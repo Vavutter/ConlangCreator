@@ -1,0 +1,11 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#app {
+  margin-top: 2rem;
+}
+
+textarea.textarea {
+  min-height: 150px;
+}

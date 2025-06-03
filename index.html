@@ -1,1 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conlang Creator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js"></script>
+</head>
+<body>
+  <section class="hero is-primary is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Conlang Creator</h1>
+        <h2 class="subtitle">Build your own constructed language</h2>
+      </div>
+    </div>
+  </section>
 
+  <div id="app" class="section">
+    <div class="container">
+      <nav class="tabs">
+        <ul>
+          <li :class="{ 'is-active': activeTab === 'phonology' }"><a @click.prevent="activeTab = 'phonology'">Phonology</a></li>
+          <li :class="{ 'is-active': activeTab === 'lexicon' }"><a @click.prevent="activeTab = 'lexicon'">Lexicon</a></li>
+          <li :class="{ 'is-active': activeTab === 'grammar' }"><a @click.prevent="activeTab = 'grammar'">Grammar</a></li>
+          <li :class="{ 'is-active': activeTab === 'generator' }"><a @click.prevent="activeTab = 'generator'">Generator</a></li>
+        </ul>
+      </nav>
+
+      <div v-show="activeTab === 'phonology'">
+        <h3 class="title is-4">Phonology</h3>
+        <div class="field">
+          <label class="label">Consonants</label>
+          <div class="control">
+            <input class="input" type="text" v-model="phonology.consonants" placeholder="e.g. p t k b d g ...">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Vowels</label>
+          <div class="control">
+            <input class="input" type="text" v-model="phonology.vowels" placeholder="e.g. a e i o u">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Phonotactics / Notes</label>
+          <div class="control">
+            <textarea class="textarea" v-model="phonology.notes" placeholder="Describe syllable structures, stress patterns..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="activeTab === 'lexicon'">
+        <h3 class="title is-4">Lexicon</h3>
+        <form @submit.prevent="addEntry" class="box">
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field">
+                <p class="control is-expanded">
+                  <input class="input" v-model="entry.word" placeholder="Word" required>
+                </p>
+              </div>
+              <div class="field">
+                <p class="control is-expanded">
+                  <input class="input" v-model="entry.translation" placeholder="Meaning" required>
+                </p>
+              </div>
+              <div class="field">
+                <p class="control is-expanded">
+                  <input class="input" v-model="entry.pos" placeholder="Part of Speech">
+                </p>
+              </div>
+              <div class="field">
+                <p class="control">
+                  <button class="button is-primary" type="submit">Add</button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </form>
+        <table class="table is-fullwidth is-striped">
+          <thead>
+            <tr>
+              <th>Word</th>
+              <th>Meaning</th>
+              <th>POS</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(lex, index) in lexicon" :key="index">
+              <td>{{ lex.word }}</td>
+              <td>{{ lex.translation }}</td>
+              <td>{{ lex.pos }}</td>
+              <td><button class="delete" @click="removeEntry(index)"></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-show="activeTab === 'grammar'">
+        <h3 class="title is-4">Grammar Notes</h3>
+        <textarea class="textarea" v-model="grammarNotes" placeholder="Describe morphology, syntax, semantics..."></textarea>
+      </div>
+
+      <div v-show="activeTab === 'generator'">
+        <h3 class="title is-4">Word Generator</h3>
+        <p class="mb-3">Generate new words based on your phonology. Add syllable patterns like CV, CVC...</p>
+        <div class="field is-grouped">
+          <div class="control">
+            <input class="input" v-model="generator.pattern" placeholder="Pattern (e.g. CV, CVC)">
+          </div>
+          <div class="control">
+            <button class="button is-link" @click="generateWord">Generate</button>
+          </div>
+        </div>
+        <p v-if="generatedWord" class="notification is-success mt-2">{{ generatedWord }}</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>Made with ❤️ for conlangers.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
