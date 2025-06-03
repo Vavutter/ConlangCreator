@@ -9,17 +9,17 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js"></script>
 </head>
 <body>
-  <section class="hero is-primary is-bold">
+  <section class="hero is-bold">
     <div class="hero-body">
-      <div class="container">
+      <div class="container has-text-centered fade-in-up">
         <h1 class="title">Conlang Creator</h1>
         <h2 class="subtitle">Build your own constructed language</h2>
       </div>
     </div>
   </section>
 
-  <div id="app" class="section">
-    <div class="container">
+  <div id="app" class="section fade-in-up">
+    <div class="container glass">
       <nav class="tabs">
         <ul>
           <li :class="{ 'is-active': activeTab === 'phonology' }"><a @click.prevent="activeTab = 'phonology'">Phonology</a></li>
@@ -29,7 +29,8 @@
         </ul>
       </nav>
 
-      <div v-show="activeTab === 'phonology'">
+      <transition name="fade" mode="out-in">
+      <div v-if="activeTab === 'phonology'" key="phonology">
         <h3 class="title is-4">Phonology</h3>
         <div class="field">
           <label class="label">Consonants</label>
@@ -50,8 +51,10 @@
           </div>
         </div>
       </div>
+      </transition>
 
-      <div v-show="activeTab === 'lexicon'">
+      <transition name="fade" mode="out-in">
+      <div v-if="activeTab === 'lexicon'" key="lexicon">
         <h3 class="title is-4">Lexicon</h3>
         <form @submit.prevent="addEntry" class="box">
           <div class="field is-horizontal">
@@ -98,13 +101,17 @@
           </tbody>
         </table>
       </div>
+      </transition>
 
-      <div v-show="activeTab === 'grammar'">
+      <transition name="fade" mode="out-in">
+      <div v-if="activeTab === 'grammar'" key="grammar">
         <h3 class="title is-4">Grammar Notes</h3>
         <textarea class="textarea" v-model="grammarNotes" placeholder="Describe morphology, syntax, semantics..."></textarea>
       </div>
+      </transition>
 
-      <div v-show="activeTab === 'generator'">
+      <transition name="fade" mode="out-in">
+      <div v-if="activeTab === 'generator'" key="generator">
         <h3 class="title is-4">Word Generator</h3>
         <p class="mb-3">Generate new words based on your phonology. Add syllable patterns like CV, CVC...</p>
         <div class="field is-grouped">
@@ -117,6 +124,7 @@
         </div>
         <p v-if="generatedWord" class="notification is-success mt-2">{{ generatedWord }}</p>
       </div>
+      </transition>
     </div>
   </div>
 
